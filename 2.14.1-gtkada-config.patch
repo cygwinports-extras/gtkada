@@ -1,0 +1,25 @@
+--- origsrc/GtkAda-2.14.1/src/tools/gtkada-config.in	2009-02-28 03:45:18.000000000 -0600
++++ src/GtkAda-2.14.1/src/tools/gtkada-config.in	2011-02-11 05:25:00.912944000 -0600
+@@ -7,12 +7,7 @@ libdir=@libdir@/gtkada
+ includedir=@includedir@/gtkada
+ gtk_libs="@GTK_LIBS@"
+ 
+-# OS Specific relocatable settings
+-if [ "$OS" = "Windows_NT" ]; then
+-    os_reloc="-L${prefix}/bin -lgtkada-@GTKADA_MAJOR_VERSION@.@GTKADA_MINOR_VERSION@"
+-else
+-    os_reloc="-L${libdir}/relocatable -lgtkada"
+-fi
++os_reloc="-L${libdir}/relocatable -lgtkada"
+ 
+ cflags_static="-aI${includedir} -aO${libdir}/static"
+ cflags_relocatable="-aI${includedir} -aO${libdir}/relocatable"
+@@ -36,7 +31,7 @@ EOF
+ 
+ show_cflags=1
+ show_libs=1
+-libtype=relocatable
++libtype=@DEFAULT_LIBRARY_TYPE@
+ 
+ # Can have the following values:
+ #   0 = none

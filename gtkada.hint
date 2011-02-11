@@ -1,0 +1,5 @@
+category: Gnome
+sdesc: "Ada bindings for GTK+ and GNOME libraries (sources)"
+ldesc: "GtkAda is an Ada graphical toolkit based on Gtk+, providing the 
+complete set of Gtk+ widgets using the Object-Oriented features of this 
+language."

@@ -1,0 +1,80 @@
+--- origsrc/GtkAda-2.14.1/aclocal.m4	2008-05-14 10:07:19.000000000 -0500
++++ src/GtkAda-2.14.1/aclocal.m4	2011-02-11 03:51:04.513575300 -0600
+@@ -72,6 +72,11 @@ Make them the installation default])],
+       ac_GNATLIB=`cd $ac_GNATDIR; ls libgnat*.dll | sed 's,lib,,;s,.dll,,'`
+       OS_SPECIFIC_LINK_OPTIONS=-Wl,-L$ac_GNATDIR,-l$ac_GNATLIB
+       ;;
++   *cygwin*)
++      SO_EXT=.dll
++      FPIC=
++      OS_SPECIFIC_LINK_OPTIONS="-Wl,--out-implib,\$(LIBNAME).a -lgnat-4.5"
++      ;;
+    *darwin*)
+       SO_EXT=.dylib
+       BUILD_SHARED=no
+--- origsrc/GtkAda-2.14.1/src/glade/Makefile.in	2007-06-22 21:18:24.000000000 -0500
++++ src/GtkAda-2.14.1/src/glade/Makefile.in	2011-02-11 02:38:44.166044900 -0600
+@@ -1,10 +1,14 @@
+ OBJ_DIR          = obj
++ifeq ($(OS),Windows_NT)
++SONAME           = libgtkada_glade-$(MAJOR).$(MINOR)$(SO_EXT)
++else
+ SONAME           = libgtkada_glade-$(MAJOR).$(MINOR)$(SO_EXT).$(MICRO)
++endif
+ LIBNAME          = libgtkada_glade$(SO_EXT)
+ ARCHIVENAME      = libgtkada_glade.a
+ LIBGLADE_SOURCES = glade.adb glade-xml.adb
+ LIBGLADE_OBJECTS = glade.o glade-xml.o
+-EXTERNAL_LIBS    = @LIBGLADE_LIBS@
++EXTERNAL_LIBS    = -L../../lib-obj -lgtkada @LIBGLADE_LIBS@
+ GPRFILE          = glade
+ SRC_FILES        = ${LIBGLADE_OBJECTS}
+ include ../Makefile.common
+--- origsrc/GtkAda-2.14.1/src/gnome/Makefile.in	2007-06-22 21:18:01.000000000 -0500
++++ src/GtkAda-2.14.1/src/gnome/Makefile.in	2011-02-11 02:40:19.368361500 -0600
+@@ -1,9 +1,13 @@
+ OBJ_DIR       = obj
+ LIBNAME       = libgnomeada$(SO_EXT)
++ifeq ($(OS),Windows_NT)
++SONAME        = libgnomeada-$(MAJOR).$(MINOR)$(SO_EXT)
++else
+ SONAME        = libgnomeada-$(MAJOR).$(MINOR)$(SO_EXT).$(MICRO)
++endif
+ ARCHIVENAME   = libgnomeada.a
+ SRC_FILES     = gnome.o gnome-*.o bonobo*.o
+-EXTERNAL_LIBS = @GNOME_LIBS@
++EXTERNAL_LIBS = -L../../lib-obj -lgtkada @GNOME_LIBS@
+ GPRFILE       = gnome
+ 
+ include ../Makefile.common
+--- origsrc/GtkAda-2.14.1/src/opengl/Makefile.in	2008-05-14 10:07:19.000000000 -0500
++++ src/GtkAda-2.14.1/src/opengl/Makefile.in	2011-02-11 02:37:50.356331600 -0600
+@@ -1,12 +1,16 @@
+ CFLAGS           = @CFLAGS@ -Wall @GTK_CFLAGS@ -I. $(FPIC)
+ OBJ_DIR          = obj
++ifeq ($(OS),Windows_NT)
++SONAME           = libgtkada_gl-$(MAJOR).$(MINOR)$(SO_EXT)
++else
+ SONAME           = libgtkada_gl-$(MAJOR).$(MINOR)$(SO_EXT).$(MICRO)
++endif
+ LIBNAME          = libgtkada_gl$(SO_EXT)
+ ARCHIVENAME      = libgtkada_gl.a
+ OPENGL_OBJECTS   = gtk-glarea.o gdk-gl.o gl_h.o
+ OPENGL_C_OBJECTS = gtkglarea.o gdkgl.o
+ OPENGL_C_OBJECTS_DIR = ${OPENGL_C_OBJECTS:%=${OBJ_DIR}/%}
+-EXTERNAL_LIBS    = @GL_LIBS@
++EXTERNAL_LIBS    = -L../../lib-obj -lgtkada @GL_LIBS@
+ OPENGL_FLAGS     = @GL_CFLAGS@
+ GPRFILE          = opengl
+ SRC_FILES        = ${OPENGL_OBJECTS} ${OPENGL_C_OBJECTS}
+--- origsrc/GtkAda-2.14.1/testgtk/Makefile.in	2008-05-15 02:36:05.000000000 -0500
++++ src/GtkAda-2.14.1/testgtk/Makefile.in	2011-02-11 05:23:26.327096100 -0600
+@@ -24,7 +24,7 @@ INSTALL_SCRIPT = @INSTALL_SCRIPT@
+ 
+ ifeq ($(HAVE_OPENGL),True)
+ OPENGL_C_OBJECTS=lw.o
+-OPENGL_LIBS= @GL_LIBS@
++OPENGL_LIBS= -lgtkgl-2.0 @GL_LIBS@
+ else
+ OPENGL_C_OBJECTS=
+ OPENGL_LIBS=

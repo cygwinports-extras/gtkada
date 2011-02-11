@@ -1,0 +1,34 @@
+DESCRIPTION="Ada bindings for GTK+ and GNOME libraries"
+HOMEPAGE="http://libre.adacore.com/libre/tools/gtkada/"
+SRC_URI="GtkAda-${PV}.tgz"
+SRC_DIR="GtkAda-${PV}"
+
+PATCH_URI="
+	2.14.1-cygwin.patch
+	2.14.1-gtk2.22.patch
+	2.14.1-gtkada-config.patch
+"
+
+PKG_NAMES="libgtkada-devel" # libgtkada${PV[1]}.${PV[2]}
+declare libgtkada${PV[1]}_${PV[2]}_CONTENTS="usr/bin/*-${PV[1]}.${PV[2]}.dll"
+libgtkada_devel_CONTENTS="--exclude=*.dll usr/"
+
+src_compile() {
+	cd ${S}
+	cygautoreconf
+	lndirs
+	cd ${B}
+	# shared libgnat doesn't quite work correctly yet
+	cygconf --disable-shared
+	cygmake -j1
+}
+
+src_install() {
+	cd ${B}
+	cyginstall prefix=${D}/usr examples=${D}/usr/share/doc/${PN}/examples DIRSEP=: GATE=gate
+
+#	mv ${D}/usr/lib/gtkada/relocatable/*.dll ${D}/usr/bin/
+
+#	insinto /usr/lib/gtkada/relocatable
+#	doins src/lib-obj/*.dll.a src/*/obj/*.dll.a
+}

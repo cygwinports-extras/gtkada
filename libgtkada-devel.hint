@@ -1,0 +1,7 @@
+category: Gnome
+requires: libglib2.0-devel libpango1.0-devel libgtk2.0-devel libglade2.0-devel libGL-devel libgnomeui2-devel
+external-source: gtkada
+sdesc: "Ada bindings for GTK+ and GNOME libraries (development)"
+ldesc: "GtkAda is an Ada graphical toolkit based on Gtk+, providing the 
+complete set of Gtk+ widgets using the Object-Oriented features of this 
+language."

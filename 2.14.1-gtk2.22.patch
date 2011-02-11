@@ -1,0 +1,41 @@
+--- origsrc/GtkAda-2.14.1/src/gtkextra/gtkitementry.c	2007-06-22 21:17:47.000000000 -0500
++++ src/GtkAda-2.14.1/src/gtkextra/gtkitementry.c	2011-02-11 02:15:45.169457000 -0600
+@@ -32,6 +32,11 @@
+ #include <gtk/gtk.h>
+ #include "gtkitementry.h"
+ 
++#if GTK_CHECK_VERSION(2,22,0)
++#define text_size x_text_size
++#define n_bytes x_n_bytes
++#endif
++
+ #define MIN_ENTRY_WIDTH  150
+ #define DRAW_TIMEOUT     20
+ #define INNER_BORDER     0
+@@ -131,7 +136,9 @@ static void         gtk_entry_draw_curso
+ static PangoLayout *gtk_entry_ensure_layout            (GtkEntry       *entry,
+                                                         gboolean        include_preedit);
+ static void         gtk_entry_queue_draw               (GtkEntry       *entry);
++#if !GTK_CHECK_VERSION(2,22,0)
+ static void         gtk_entry_reset_im_context         (GtkEntry       *entry);
++#endif
+ static void         gtk_entry_recompute                (GtkEntry       *entry);
+ static void         gtk_entry_get_cursor_locations     (GtkEntry       *entry,
+ 							CursorType      type,
+@@ -1694,6 +1701,8 @@ gtk_entry_queue_draw (GtkEntry *entry)
+     gdk_window_invalidate_rect (entry->text_area, NULL, FALSE);
+ }
+ 
++
++#if !GTK_CHECK_VERSION(2,22,0)
+ static void
+ gtk_entry_reset_im_context (GtkEntry *entry)
+ {
+@@ -1703,6 +1712,7 @@ gtk_entry_reset_im_context (GtkEntry *en
+       gtk_im_context_reset (entry->im_context);
+     }
+ }
++#endif
+ 
+ static void
+ gtk_entry_get_cursor_locations (GtkEntry   *entry,
